@@ -11,11 +11,11 @@ protected $role = '';
 
     public function __construct($id, $fullName, $phone, $email, $role)
     {
-        $this->id = $id;
-        $this->fullName = $fullName;
-        $this->phone = $phone;
-        $this->email = $email;
-        $this->role = $role;
+        $this->id = htmlspecialchars($id);
+        $this->fullName = htmlspecialchars($fullName);
+        $this->phone = htmlspecialchars($phone);
+        $this->email = htmlspecialchars($email);
+        $this->role = htmlspecialchars($role);
     }
 
     public function getVisitCard(){
@@ -27,18 +27,5 @@ protected $role = '';
         $getVC .= '</ul>';
         return $getVC;
     }
-
-    static public function getAll($id, PDO $pdo){
-        try{
-            $sql = 'SELECT id,full_name,phone,email,working_day,role,subject,average_mark FROM members WHERE id=:id';
-            $statement = $pdo->prepare($sql);
-            $statement->bindValue(':id', $id);
-            $statement->execute();
-            $arrays = $statement->fetchAll();
-            return $arrays;
-        }catch (Exception $exception){
-            echo "Error getting admins! " . $exception->getCode() . ' message: ' . $exception->getMessage();
-            die();
-        }
-    }
+    
 }

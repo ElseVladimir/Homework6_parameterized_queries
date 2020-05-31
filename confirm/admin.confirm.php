@@ -1,6 +1,8 @@
 <?php
 //крад для админ формы(ввод в базу)
 require_once "../includes/dbConnect.php";
+require_once "../classes/Person.php";
+require_once "../classes/Admin.php";
 $name = htmlspecialchars($_POST['name']);
 $telNumber = htmlspecialchars($_POST['telNumber']);
 $email = htmlspecialchars($_POST['email']);
@@ -23,28 +25,7 @@ if(empty($workDay)){
     echo 'Введите день недели'.'<br>';
 }
 if($name && $telNumber && $email && $who && $workDay){
-    try {
-        $sql = 'INSERT INTO members SET
-           full_name = :name ,
-           phone =  :telNumber ,
-           email = :email ,
-           role = :who ,
-           working_day = :workDay ,
-           average_mark = :mark ,
-           subject = :subj
-    ';
-        $statement = $pdo->prepare($sql);
-        $statement->bindValue(':name',$name);
-        $statement->bindValue(':telNumber',$telNumber);
-        $statement->bindValue(':email',$email);
-        $statement->bindValue(':who',$who);
-        $statement->bindValue(':workDay',$workDay);
-        $statement->bindValue(':mark',NULL);
-        $statement->bindValue(':subj',NULL);
-        $statement->execute();
-    } catch (Exception $exception) {
-        echo 'Error creating table' . $exception->getCode() . ' ' . $exception->getMessage();
-        die();
-    }
+    $admin = new Admin($id, $name, $telNumber, $email, $who,$workDay);
+    $admin->getAdmConfirm($pdo, $name, $telNumber, $email, $who,$workDay);
     header('Location: ../includes/complete.php');
 }

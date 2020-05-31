@@ -5,7 +5,12 @@ require_once "classes/Person.php";
 require_once "classes/Student.php";
 require_once "classes/Teacher.php";
 require_once "classes/Admin.php";
-require_once "includes/selectMembers.php";
+
+$adminArr = Admin::getSelectAdm($pdo);
+
+$teacherArr = Teacher::getSelectTeach($pdo);
+
+$studentArr = Student::getSelectStud($pdo);
 ?>
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
@@ -43,14 +48,14 @@ require_once "includes/selectMembers.php";
         <?php foreach ($teacherArr as $teacher) :?>
             <?php $teach = new Teacher($teacher['id'], $teacher['full_name'],$teacher['phone'],$teacher['email'],$teacher['role'],$teacher['subject']); ?>
             <div>Имя: <?= $teach->getNameTeacher();?>.
-            <a href="visitCard.php?id=<?=$teach->getID();?>&role=<?=$teacher['role'];?>">Визитка</a></div>
+            <a href="visitCard.php?id=<?=$teach->getID();?>&role=<?=htmlspecialchars($teacher['role']);?>">Визитка</a></div>
         <?php endforeach; ?>
     <hr>
         <h3>Список студентов</h3>
         <?php foreach ($studentArr as $student) :?>
             <?php $stud = new Student($student['id'],$student['full_name'],$student['phone'],$student['email'],$student['role'],$student['average_mark']); ?>
             <div>Имя: <?= $stud->getNameStudent();?>.
-            <a href="visitCard.php?id=<?=$stud->getID();?>&role=<?=$student['role'];?>">Визитка</a></div>
+            <a href="visitCard.php?id=<?=$stud->getID();?>&role=<?=htmlspecialchars($student['role']);?>">Визитка</a></div>
         <?php endforeach; ?>
 </body>
 </html>
